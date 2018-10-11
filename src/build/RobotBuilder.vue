@@ -2,7 +2,7 @@
   <div class="content">
     <button class="add-to-cart" @click="addToCart()">Add To Cart</button>
     <div class="top-row">
-      <div class="top part">
+      <div :class="[saleBorderClass, 'top', 'part']">
         <div class="robot-name">
           {{selectedRobot.head.title}}
           <span v-if="selectedRobot.head.onSale" class="sale">Sale!</span>
@@ -59,6 +59,7 @@
 
 <script>
 import availableParts from '../data/parts';
+import createdHookMixin from './created-hook-mixin';
 
 function getPreviousValidIndex(index, length) {
   const deprecatedIndex = index - 1;
@@ -83,7 +84,16 @@ export default {
       selectedBaseIndex: 0,
     };
   },
+  mixins: [createdHookMixin],
   computed: {
+    saleBorderClass() {
+      return this.selectedRobot.head.onSale ? 'sale-border' : '';
+    },
+    headBorderStyle() {
+      return {
+        border: this.selectedRobot.head.onSale ? '3px soid red' : '3px solid #aaa',
+      };
+    },
     selectedRobot() {
       return {
         head: availableParts.heads[this.selectedHeadIndex],
@@ -178,15 +188,17 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .part {
   position: relative;
   width:165px;
   height:165px;
   border: 3px solid #aaa;
 }
-.part img {
-  width:165px;
+.part {
+  img {
+    width:165px;
+  }
 }
 .top-row {
   display:flex;
@@ -235,21 +247,25 @@ export default {
   width: 25px;
   height: 171px;
 }
-.center .prev-selector, .center .next-selector {
-  opacity:0.8;
+.center {
+  .prev-selector, .next-selector {
+    opacity:0.8;
+  }
 }
-.left .prev-selector {
-  top: -28px;
-  left: -3px;
-  width: 144px;
-  height: 25px;
-}
-.left .next-selector {
-  top: auto;
-  bottom: -28px;
-  left: -3px;
-  width: 144px;
-  height: 25px;
+.left {
+  .prev-selector, .next-selector {
+    width: 144px;
+    height: 25px;
+  }
+  .prev-selector{
+    top: -28px;
+    left: -3px;
+  }
+  .next-selector{
+    top: auto;
+    bottom: -28px;
+    left: -3px;
+  }
 }
 .right .prev-selector {
   top: -28px;
@@ -293,6 +309,9 @@ td, th{
 }
 .cost{
   text-align: right;
+}
+.sale-border{
+  border: 3px solid red;
 }
 </style>
 
