@@ -85,6 +85,7 @@ aside{
   min-height: 300px;
 }
 .container{
+  width: 1184px;
   display: flex;
   margin: 10px auto 0 auto;
   justify-content: center;
